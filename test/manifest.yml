@@ -1,0 +1,22 @@
+---
+applications:
+- name: core-pyp
+  host: core-pyp
+  path: ./core-py/
+  command: python server.py
+  services:
+   - hdi_db
+   - openSAPHANA-uaa
+# - name: webp
+#   path: ./app-router/
+#   env:
+#     destinations: >
+#       [
+#         {
+#           "name": "core-py",
+#           "url": "https://core-pyp.cfapps.eu10.hana.ondemand.com",
+#           "forwardAuthToken": true
+#         }
+#       ]
+#   services:
+#    - openSAPHANA-uaa

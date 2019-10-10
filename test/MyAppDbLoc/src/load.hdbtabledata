@@ -1,0 +1,29 @@
+{
+	"format_version": 1,
+	"imports": [{
+		"target_table": "MyAppDemo.MyAppDbLoc::myapp.studentTable",
+		"source_data": {
+			"data_type": "CSV",
+			"file_name": "MyAppDemo.MyAppDbLoc::data.csv",
+			"has_header": false,
+			"dialect": "HANA",
+			"type_config": {
+				"delimiter": ","
+			}
+		},
+		"import_settings": {
+			"import_columns": [
+				"name",
+				"groups",
+				"faculty",
+				"specialty"
+			]
+		},
+		"column_mappings": {
+			"name": 1,
+			"groups": 2,
+			"faculty": 3,
+			"specialty": 4
+		}
+	}]
+}

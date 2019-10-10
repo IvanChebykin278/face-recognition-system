@@ -1,0 +1,18 @@
+namespace MyAppDemo.MyAppDbLoc;
+
+context myapp {
+	entity studentTable {
+		name: String(10);
+		groups: String(10);
+		faculty: String(30);
+		specialty: String(30);
+	}
+	
+	view studentView as 
+	select from studentTable {
+		name,
+		groups,
+		faculty,
+		specialty
+	};
+};

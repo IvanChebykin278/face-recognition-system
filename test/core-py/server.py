@@ -1,15 +1,16 @@
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from cfenv import AppEnv
-from hdbcli import dbapi
 
 import logging
 from cf_logging import flask_logging
 
 #imports for user authorization
-from sap import xssec
 from flask import request
-from flask import abort
+
+# import classifer
+import pickle
+from sklearn import neighbors
 
 app = Flask(__name__)
 env = AppEnv()
@@ -22,45 +23,43 @@ port = int(os.environ.get('PORT', 3000))
 hana = env.get_service(name='hdi_db')
 
 #access credentials of uaa service
-uaa_service = env.get_service(name='openSAPHANA-uaa').credentials
+# uaa_service = env.get_service(name='openSAPHANA-uaa').credentials
+
+@app.route('/train')
+def train():
+    model_save_path="./trained_knn_model.clf"
+    n_neighbors=2
+    knn_algo='ball_tree'
+
+    X = [[0., 1.],[1.,0.],[1.,1.],[0.,0.]]
+    y = [0,0,1,1]
+
+    knn_clf = neighbors.KNeighborsClassifier(n_neighbors=n_neighbors, algorithm=knn_algo, weights='distance')
+    knn_clf.fit(X, y)
+
+    if model_save_path is not None:
+        with open(model_save_path, 'wb') as f:
+            pickle.dump(knn_clf, f)
+
+    return jsonify({"output": 'Training complete!'})
+
+@app.route('/predict')
+def predict():
+    knn_clf=None
+    model_path="./trained_knn_model.clf"
+
+    if knn_clf is None:
+        with open(model_path, 'rb') as f:
+            knn_clf = pickle.load(f)
+
+    output = knn_clf.predict([[1.,1.]])
+
+    return jsonify({'output': output.tolist()})
 
 @app.route('/')
 def hello():
-    #check if authorization information is provided
-    if 'authorization' not in request.headers:
-        abort(403)
+    return 'hello'
     
-    #check if user is authorized
-    access_token = request.headers.get('authorization')[7:]
-    security_context = xssec.create_security_context(access_token, uaa_service)
-    isAuthorized = security_context.check_scope('openid')
-    
-    if not isAuthorized:
-	    abort(403)
-
-    conn = dbapi.connect(address=hana.credentials['host'],
-                         port=int(hana.credentials['port']),
-                         user=hana.credentials['user'],
-                         password=hana.credentials['password'],
-                         CURRENTSCHEMA=hana.credentials['schema'],
-                         encrypt='true',
-                         sslCryptoProvider = 'openssl',
-                         sslKeyStore = './mycert.pem',
-                         sslTrustStore = './mycert.pem',
-                         sslValidateCertificate = 'false')
-
-    if conn.isconnected():
-        logger.info('Connection to databse successful')
-    else:
-        logger.info('Unable to connect to database')
-
-    cursor = conn.cursor()
-    cursor.execute("select CURRENT_UTCTIMESTAMP from DUMMY", {})
-    ro = cursor.fetchone()
-    cursor.close()
-    conn.close()
-
-    return "Current time is: " + str(ro["CURRENT_UTCTIMESTAMP"])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port)

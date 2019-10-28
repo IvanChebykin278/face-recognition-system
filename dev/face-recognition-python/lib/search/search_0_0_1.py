@@ -8,13 +8,13 @@ from flask import jsonify
 def predict(file_stream):
     
     # remove декодирование изображений
-    vanya_image = face_recognition.load_image_file("ivan.jpg")
+    vanya_image = face_recognition.load_image_file("test/ivan.jpg")
     vanya_face_encoding = face_recognition.face_encodings(vanya_image)[0]
 
-    artem_image = face_recognition.load_image_file("artem.jpg")
+    artem_image = face_recognition.load_image_file("test/artem.jpg")
     artem_face_encoding = face_recognition.face_encodings(artem_image)[0]
 
-    vova_image = face_recognition.load_image_file("vova.jpg")
+    vova_image = face_recognition.load_image_file("test/vova.jpg")
     vova_face_encoding = face_recognition.face_encodings(vova_image)[0]
 
     # вытягиваем из базы данные кодированных лиц (всех) и помощаем их в массив извесных лиц

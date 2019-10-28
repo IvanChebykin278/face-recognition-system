@@ -4,9 +4,6 @@ applications:
   host: core-pyp
   path: ./core-py/
   command: python server.py
-  services:
-   - hdi_db
-   - openSAPHANA-uaa
 # - name: webp
 #   path: ./app-router/
 #   env:

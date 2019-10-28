@@ -1,0 +1,65 @@
+if len(images) == 0 and len(names) == 0:
+        return {
+            "seccess":False,
+            "message":'arrays with images and names is empty',
+            "code": 1
+        }
+
+    if len(images) == 0: 
+        return {
+            "seccess":False,
+            "message":"arrays with images and names is empty",
+            "code": 2
+        }
+    
+    if len(names) == 0:
+         return {
+            "seccess":False,
+            "message":"array with names is empty",
+            "code": 3
+        }
+
+    if len(images) == 1:
+        return {
+            "seccess":False,
+            "message":"there must be more than one image",
+            "code": 4
+        }
+
+    if len(names) == 1:
+        return {
+            "seccess":False,
+            "message":"there must be more than one name",
+            "code": 5
+        }
+
+    if len(images) != len(names):
+        return {
+            "seccess":False,
+            "message":"the lengths of the arrays of images and names must be equal",
+            "code": 6
+        }
+
+    count = 0
+    for name in names:
+        if name == names[0]:
+            count += 1
+
+    if count == len(names):
+        return {
+            "seccess":False,
+            "message":"there must be more than one name",
+            "code": 7
+        }
+
+    return True
+
+
+# Файл с кодами ошибок:
+
+0 - все успешно
+
+#Относятся к тренировке классификатора (def train, file trained_0_0_2)
+1 - массивы изображений и имен пусты 
+2 - массив изоражений пуст
+3 - массив имент пуст

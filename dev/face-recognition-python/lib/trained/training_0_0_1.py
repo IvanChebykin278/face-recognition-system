@@ -8,6 +8,7 @@ from flask import jsonify
 def training(file_stream):
     
     img = face_recognition.load_image_file(file_stream)
+    print(img)
     encoding = face_recognition.face_encodings(img)[0]
 
     # todo: Отправка данных кодировки в базу данных

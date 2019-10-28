@@ -2,8 +2,8 @@ import React from 'react';
 import Webcam from "react-webcam";
 
 const videoConstraints = {
-    width: 600,
-    height: 600,
+    width: 300,
+    height: 300,
     facingMode: "user"
 };
 
@@ -49,7 +49,7 @@ export default function WebcamCapture() {
             formData.append('data','yes');
             formData.append('image', imageBlob, 'image.jpg');
 
-            fetch('http://127.0.0.1:5000/insert', {
+            fetch('http://127.0.0.1:5000/predict', {
                 method: 'POST',
                 body: formData 
             })
@@ -63,10 +63,10 @@ export default function WebcamCapture() {
         <div>
             <Webcam
                 audio={false}
-                height={720}
+                height={600}
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
-                width={1280}
+                width={600}
                 videoConstraints={videoConstraints}
             />
             <button onClick={capture}>Capture photo</button>

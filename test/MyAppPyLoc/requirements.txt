@@ -1,4 +1,4 @@
-Flask==0.12.2
+Flask==1.0
 cfenv==0.5.3
 hdbcli==2.4.162
 requests
